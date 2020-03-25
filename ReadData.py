@@ -89,14 +89,15 @@ def binary_converter(amino_set: List[List[Any]], ID_set: List[List[Any]], bineri
         for sublist in temp_list:
             for item in sublist:
                 final_list.append(item)
-        new_amino_set[position].extend(np.array(final_list))
+        new_amino_set[position].extend(np.array(final_list, object))
         if ID_set[position] == "SP":
             ID_set[position] = 1
         elif ID_set[position] == "NO_SP":
             ID_set[position] = 0
         else:
             print("{} is not SP or NO_SP".format(position))
-    return np.array(new_amino_set), ID_set
+    new_amino_set.remove([])
+    return np.array(new_amino_set, object), ID_set
 
 
 def learn(train_set: List[List[Any]], train_ID: List[List[Any]], test_set: List[List[Any]], test_ID: List[List[Any]]):
@@ -111,14 +112,15 @@ def learn(train_set: List[List[Any]], train_ID: List[List[Any]], test_set: List[
     svc = svm.SVC(kernel='linear')  # constructor
     print("Start to train set.")
     svc.fit(train_set, train_ID)  # fit classifier data
-
+    print("Predicting...")
     predicted = svc.predict(test_set)  # predicts class_id of test set <- "test"
+    print("Evaluating...")
     score = svc.score(test_set, test_ID)  # evaluate prediction quality/performance <- "evaluation"
 
     print('============================================')
     print('\nScore ', score)
-    print('\nResult Overview\n', metrics.classification_report(train_ID, predicted))
-    print('\nConfusion matrix:\n', metrics.confusion_matrix(train_ID, predicted))
+    print('\nResult Overview\n', metrics.classification_report(test_ID, predicted))
+    print('\nConfusion matrix:\n', metrics.confusion_matrix(test_ID, predicted))
 
 
 if __name__ == '__main__':
