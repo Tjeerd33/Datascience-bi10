@@ -7,10 +7,15 @@ from sklearn.preprocessing import LabelBinarizer
 
 
 def main():
+    """
+    Main function to call
+    """
     read_vector, ID_vector = read_data()  # type: (List[List[Any]], List[List[Any]])
     train_set, train_ID, test_set, test_ID = seperate_sets(read_vector, ID_vector)
     train_set, train_ID, test_set, test_ID = binary_labeler(train_set, train_ID, test_set, test_ID)
-    learn(train_set, train_ID, test_set, test_ID)
+    learn(train_set, train_ID, test_set, test_ID, model_type="linear")
+    learn(train_set, train_ID, test_set, test_ID, model_type="poly")
+    learn(train_set, train_ID, test_set, test_ID, model_type="rbf")
 
 
 def read_data(File_path: str = '/home/theox/Documents/School/Course10a/DataScience/train_set.fasta') -> (
@@ -100,16 +105,18 @@ def binary_converter(amino_set: List[List[Any]], ID_set: List[List[Any]], bineri
     return np.array(new_amino_set, object), ID_set
 
 
-def learn(train_set: List[List[Any]], train_ID: List[List[Any]], test_set: List[List[Any]], test_ID: List[List[Any]]):
+def learn(train_set: List[List[Any]], train_ID: List[List[Any]], test_set: List[List[Any]], test_ID: List[List[Any]],
+          model_type: str):
     """
 
     :rtype: object
     :param test_set: List[List[Any]]
     :param test_ID: List[List[Any]]
     :param train_ID: List[List[Any]]
+    :param model_type: String
     :type train_set: List[List[Any]]
     """
-    svc = svm.SVC(kernel='linear')  # constructor
+    svc = svm.SVC(kernel=model_type)  # constructor
     print("Start to train set.")
     svc.fit(train_set, train_ID)  # fit classifier data
     print("Predicting...")
