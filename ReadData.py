@@ -110,7 +110,7 @@ def learn(train_set: List[List[Any]], train_ID: List[List[Any]], test_set: List[
     """
     svc = svm.SVC(kernel='linear')  # constructor
     print("Start to train set.")
-    svc.fit(train_set, train_ID)  # fit classifier data <- "training" #error: too many dimensions array is 3 dimensional [[(0,0,0,1,....),(0,1,0,...),...][(0,0,0,1,....),(0,1,0,...),...],...]
+    svc.fit(train_set, train_ID)  # fit classifier data
 
     predicted = svc.predict(test_set)  # predicts class_id of test set <- "test"
     score = svc.score(test_set, test_ID)  # evaluate prediction quality/performance <- "evaluation"
